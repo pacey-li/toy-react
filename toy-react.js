@@ -7,6 +7,8 @@ class ElementWrapper {
     setAttribute (name, value) {
         if (name.match(/^on([\s\S]+)$/)) {
             this.root.addEventListener(RegExp.$1.replace(/^[\s\S]/, c => c.toLowerCase()), value)
+        } else if (name === 'className') {
+            this.root.setAttribute('class', value)
         } else {
             this.root.setAttribute(name, value)
         }
@@ -88,6 +90,9 @@ export function createElement (type, attrMap, ...children) {
         for (let child of children) {
             if (typeof child === 'string') {
                 child = new TextWrapper(child)
+            }
+            if (child === null) {
+                continue
             }
             if (typeof child === 'object' && child instanceof Array) {
                 insertChildren(child)
